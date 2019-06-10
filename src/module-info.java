@@ -7,6 +7,7 @@ module Movie.List {
     requires javafx.media;
     requires javafx.swing;
     requires javafx.swt;
+    requires javafx.web;
     opens sample;
 
 }

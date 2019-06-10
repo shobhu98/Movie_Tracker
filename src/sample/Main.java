@@ -1,15 +1,19 @@
 package sample;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
+
 
 public class Main extends Application{
     TableView<Movie> table;
@@ -22,35 +26,45 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception{
 
       //  Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        Movie m1=new Movie("Avatar",2009,"Drama");
-        Movie m2=new Movie("End Game",2019,"Fiction");
-        Movie m3=new Movie("Titanic",1997,"Romantic");
+//        Movie m1=new Movie();
+//        Movie m2=new Movie("End Game",2019,"Fiction");
+//        Movie m3=new Movie("Titanic",1997,"Romantic");
 
 
         Label label=new Label("Movie Inventory");
         label.setFont(new Font("Arial",20));
         label.setPadding(new Insets(20,20,0,20));
 
-        table=new TableView<>();
-        table.getItems().addAll(m1,m2,m3);
-        table.setEditable(true);
+
+
 
 
 
         TableColumn<Movie,String> title=new TableColumn<>("Title");
         title.setPrefWidth(300);
-        PropertyValueFactory<Movie,String> p=new PropertyValueFactory<>("name");
-        title.setCellValueFactory(p);
+      //  PropertyValueFactory<Movie,String> p=new PropertyValueFactory<>("name");
+        title.setCellValueFactory(new PropertyValueFactory<>("name"));
+        title.setCellFactory(TextFieldTableCell.forTableColumn());
+
 
         TableColumn<Movie,String> genre=new TableColumn<>("Genre");
         genre.setPrefWidth(100);
-        PropertyValueFactory<Movie,String> q=new PropertyValueFactory<>("genre");
-        genre.setCellValueFactory(q);
+     //   PropertyValueFactory<Movie,String> q=new PropertyValueFactory<>("genre");
+        genre.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        genre.setCellFactory(TextFieldTableCell.forTableColumn());
 
         TableColumn<Movie,Integer> year=new TableColumn<>("Year");
         year.setPrefWidth(100);
-        PropertyValueFactory<Movie,Integer> r=new PropertyValueFactory<>("year");
-        year.setCellValueFactory(r);
+       // PropertyValueFactory<Movie,Integer> r=new PropertyValueFactory<>("year");
+        year.setCellValueFactory(new PropertyValueFactory<>("year"));
+         year.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+
+        table=new TableView<>();
+//        table.getItems().addAll(m1,m2,m3);
+        table.setEditable(true);
+        table.setItems(loadata());
+
+
 
 
         table.getColumns().addAll(title,genre,year);
@@ -59,6 +73,8 @@ public class Main extends Application{
      TextField textField=new TextField();
      textField.setPromptText("Enter Title");
      textField.prefWidth(200);
+       // title.setOnEditCommit(e-> changetitle(e));
+
      TextField yea=new TextField();
      yea.setPromptText("Year");
      yea.prefWidth(100);
@@ -71,10 +87,11 @@ public class Main extends Application{
         add.minWidth(100);
         del.prefWidth(100);
 
-        title.setCellFactory(TextFieldTableCell.forTableColumn());
-        genre.setCellFactory(TextFieldTableCell.forTableColumn());
 
-//        title.setOnEditCommit();
+
+
+
+//
 //        genre.setOnEditCommit();
 
 
@@ -103,6 +120,25 @@ public class Main extends Application{
         primaryStage.show();
     }
 
+    private void changetitle(Event e) {
+        TableColumn.CellEditEvent<Movie,String> ce;
+        ce=(TableColumn.CellEditEvent)e;
+        Movie m=ce.getRowValue();
+        m.setName(ce.getNewValue());
+
+    }
+    public ObservableList<Movie> loadata(){
+
+
+        ObservableList<Movie> data=FXCollections.observableArrayList();
+        data.add(new Movie("End Game",2019,"Fiction"));
+        data.add(new Movie("Titanic",1997,"Romantic"));
+
+        return data;
+
+
+    }
+
 
     public static void main(String[] args) {
         launch(args);
@@ -111,20 +147,20 @@ public class Main extends Application{
 
     public class Movie {
         public String name;
-        protected Integer year;
-        protected String genre;
+        public Integer year;
+        public String genre;
 
-        public Movie(String name,int year,String genre){
+        public Movie(String name,Integer year,String genre){
             this.name=name;
             this.year=year;
             this.genre=genre;
         }
-        public Movie(){
+       Movie(){
 
-        }
-
+       }
 
         public String getName() {
+
             return name;
         }
 
@@ -132,11 +168,12 @@ public class Main extends Application{
             this.name = name;
         }
 
-        public int getYear() {
+        public Integer getYear() {
             return year;
         }
 
-        public void setYear(int year) {
+        public void setYear(Integer year)
+        {
             this.year = year;
         }
 
@@ -145,18 +182,20 @@ public class Main extends Application{
         }
 
         public void setGenre(String genre) {
+
             this.genre = genre;
         }
     }
     public void btnclicked(){
-        Movie m=new Movie();
-        m.setName(textField.getText());
-        m.setGenre(genr.getText());
-        m.setYear(Integer.parseInt(yea.getText()));
+        Movie m=new Movie(textField.getText(),Integer.parseInt(yea.getText()),genr.getText());
+//        m.setName(textField.getText());
+//        m.setGenre(genr.getText());
+//        m.setYear(Integer.parseInt(yea.getText()));
         table.getItems().add(m);
         textField.clear();
         genr.clear();
         yea.clear();
+
 
 
 
