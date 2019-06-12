@@ -1,4 +1,5 @@
 package sample;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,14 +13,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import  javafx.beans.*;
 import javafx.util.converter.IntegerStringConverter;
 
 
 public class Main extends Application{
     TableView<Movie> table;
-    TextField textField;
-    TextField yea;
-    TextField genr;
+    TextField textField=new TextField();
+    TextField yea=new TextField();
+    TextField genr=new TextField();
 
 
     @Override
@@ -56,7 +58,7 @@ public class Main extends Application{
         TableColumn<Movie,Integer> year=new TableColumn<>("Year");
         year.setPrefWidth(100);
        // PropertyValueFactory<Movie,Integer> r=new PropertyValueFactory<>("year");
-        year.setCellValueFactory(new PropertyValueFactory<>("year"));
+         year.setCellValueFactory(new PropertyValueFactory<>("year"));
          year.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
         table=new TableView<>();
@@ -70,19 +72,19 @@ public class Main extends Application{
         table.getColumns().addAll(title,genre,year);
 
 
-     TextField textField=new TextField();
+   //  TextField textField=new TextField();
      textField.setPromptText("Enter Title");
      textField.prefWidth(200);
        // title.setOnEditCommit(e-> changetitle(e));
 
-     TextField yea=new TextField();
+    // TextField yea=new TextField();
      yea.setPromptText("Year");
      yea.prefWidth(100);
-     TextField genr=new TextField();
+  //   TextField genr=new TextField();
      genr.setPromptText("Genre");
      genr.setPrefWidth(100);
         Button add=new Button("Add");
-        add.setOnAction(e->btnclicked());
+        add.setOnMouseClicked(e->btnclicked());
         Button del=new Button("Delete");
         add.minWidth(100);
         del.prefWidth(100);
@@ -96,21 +98,7 @@ public class Main extends Application{
 
 
         HBox hBox=new HBox(textField,yea,genr,add,del);
-
-
-
         VBox vBox=new VBox(table,hBox);
-
-
-
-
-
-
-
-
-
-
-
         VBox pane=new VBox(vBox);
         Scene scene=new Scene(pane,500,300);
 
@@ -118,6 +106,8 @@ public class Main extends Application{
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
     }
 
     private void changetitle(Event e) {
@@ -187,21 +177,17 @@ public class Main extends Application{
         }
     }
     public void btnclicked(){
-        Movie m=new Movie(textField.getText(),Integer.parseInt(yea.getText()),genr.getText());
-//        m.setName(textField.getText());
-//        m.setGenre(genr.getText());
-//        m.setYear(Integer.parseInt(yea.getText()));
-        table.getItems().add(m);
+        Movie x=new Movie();
+        String msg=textField.getText();
+        x.setName(msg);
+        x.setGenre(genr.getText());
+        x.setYear(Integer.parseInt(yea.getText()));
+        table.getItems().add(x);
         textField.clear();
         genr.clear();
         yea.clear();
-
-
-
-
-
-
     }
+
 
 
 
