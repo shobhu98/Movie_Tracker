@@ -86,6 +86,7 @@ public class Main extends Application{
         Button add=new Button("Add");
         add.setOnMouseClicked(e->btnclicked());
         Button del=new Button("Delete");
+        del.setOnAction(e->btndel());
         add.minWidth(100);
         del.prefWidth(100);
 
@@ -186,6 +187,20 @@ public class Main extends Application{
         textField.clear();
         genr.clear();
         yea.clear();
+    }
+
+    public void btndel(){
+     ObservableList<Movie> item,select;
+        item=table.getItems();
+        select=table.getSelectionModel().getSelectedItems();
+
+        for(Movie m:select){
+            item.remove(m);
+
+        }
+
+
+
     }
 
 
